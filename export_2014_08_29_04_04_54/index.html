@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html>
+<head> 
+	<title>QGIS2leaf webmap</title>
+	
+	<meta charset="utf-8" />
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.css" /> <!-- we will us e this as the styling script for our webmap-->
+	<link rel="stylesheet" href="css/MarkerCluster.css" />
+	<link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+	<link rel="stylesheet" type="text/css" href="css/own_style.css">
+	<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> <!-- this is the javascript file that does the magic-->
+	<script src="js/Autolinker.min.js"></script>
+</head>
+<body>
+	<div id="map"></div> <!-- this is the initial look of the map. in most cases it is done externally using something like a map.css stylesheet were you can specify the look of map elements, like background color tables and so on.-->
+	<script src="http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.2/leaflet.js"></script> <!-- this is the javascript file that does the magic-->
+	<script src="js/leaflet.markercluster.js"></script>
+	
+				<script src='data\exp_OsmQuery.js' ></script>
+				
+	<script>
+		var map = L.map('map', { zoomControl:true }).fitBounds([[27.6197761154,85.2666355327],[27.7507814738,85.3897230025]]);
+		var additional_attrib = 'created w. <a href="https://github.com/geolicious/qgis2leaf" target ="_blank">gis2leaf</a> by <a href="http://www.geolicious.de" target ="_blank">Geolicious</a> & contributors<br>';
+	var feature_group = new L.featureGroup([]);
+
+	var raster_group = new L.LayerGroup([]);
+	
+		map.attributionControl.addAttribution(additional_attrib + 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data: &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>');
+		var basemap = L.tileLayer('http://a.tile.stamen.com/toner/{z}/{x}/{y}.png');
+			basemap.addTo(map);	var layerOrder=new Array();
+				function pop_OsmQuery(feature, layer) {
+										var popupContent = '<table><tr><th scope="row">full_id</th><td>' + Autolinker.link(String(feature.properties.full_id)) + '</td></tr><tr><th scope="row">osm_id</th><td>' + Autolinker.link(String(feature.properties.osm_id)) + '</td></tr><tr><th scope="row">osm_type</th><td>' + Autolinker.link(String(feature.properties.osm_type)) + '</td></tr><tr><th scope="row">tourism</th><td>' + Autolinker.link(String(feature.properties.tourism)) + '</td></tr><tr><th scope="row">name</th><td>' + Autolinker.link(String(feature.properties.name)) + '</td></tr><tr><th scope="row">cuisine</th><td>' + Autolinker.link(String(feature.properties.cuisine)) + '</td></tr><tr><th scope="row">amenity</th><td>' + Autolinker.link(String(feature.properties.amenity)) + '</td></tr><tr><th scope="row">website</th><td>' + Autolinker.link(String(feature.properties.website)) + '</td></tr><tr><th scope="row">phone</th><td>' + Autolinker.link(String(feature.properties.phone)) + '</td></tr><tr><th scope="row">operator</th><td>' + Autolinker.link(String(feature.properties.operator)) + '</td></tr><tr><th scope="row">addr_stree</th><td>' + Autolinker.link(String(feature.properties.addr_stree)) + '</td></tr><tr><th scope="row">capacity</th><td>' + Autolinker.link(String(feature.properties.capacity)) + '</td></tr><tr><th scope="row">addr_city</th><td>' + Autolinker.link(String(feature.properties.addr_city)) + '</td></tr><tr><th scope="row">opening_ho</th><td>' + Autolinker.link(String(feature.properties.opening_ho)) + '</td></tr><tr><th scope="row">smoking</th><td>' + Autolinker.link(String(feature.properties.smoking)) + '</td></tr><tr><th scope="row">stars</th><td>' + Autolinker.link(String(feature.properties.stars)) + '</td></tr><tr><th scope="row">descriptio</th><td>' + Autolinker.link(String(feature.properties.descriptio)) + '</td></tr><tr><th scope="row">is_in</th><td>' + Autolinker.link(String(feature.properties.is_in)) + '</td></tr><tr><th scope="row">wheelchair</th><td>' + Autolinker.link(String(feature.properties.wheelchair)) + '</td></tr><tr><th scope="row">internet_a</th><td>' + Autolinker.link(String(feature.properties.internet_a)) + '</td></tr><tr><th scope="row">internet_1</th><td>' + Autolinker.link(String(feature.properties.internet_1)) + '</td></tr><tr><th scope="row">addr_postc</th><td>' + Autolinker.link(String(feature.properties.addr_postc)) + '</td></tr><tr><th scope="row">addr_house</th><td>' + Autolinker.link(String(feature.properties.addr_house)) + '</td></tr><tr><th scope="row">ele</th><td>' + Autolinker.link(String(feature.properties.ele)) + '</td></tr><tr><th scope="row">fax</th><td>' + Autolinker.link(String(feature.properties.fax)) + '</td></tr><tr><th scope="row">email</th><td>' + Autolinker.link(String(feature.properties.email)) + '</td></tr><tr><th scope="row">microbrewe</th><td>' + Autolinker.link(String(feature.properties.microbrewe)) + '</td></tr><tr><th scope="row">alt_name</th><td>' + Autolinker.link(String(feature.properties.alt_name)) + '</td></tr><tr><th scope="row">int_name</th><td>' + Autolinker.link(String(feature.properties.int_name)) + '</td></tr><tr><th scope="row">wifi</th><td>' + Autolinker.link(String(feature.properties.wifi)) + '</td></tr><tr><th scope="row">addr_state</th><td>' + Autolinker.link(String(feature.properties.addr_state)) + '</td></tr><tr><th scope="row">addr_count</th><td>' + Autolinker.link(String(feature.properties.addr_count)) + '</td></tr><tr><th scope="row">designatio</th><td>' + Autolinker.link(String(feature.properties.designatio)) + '</td></tr><tr><th scope="row">shop</th><td>' + Autolinker.link(String(feature.properties.shop)) + '</td></tr><tr><th scope="row">banquet</th><td>' + Autolinker.link(String(feature.properties.banquet)) + '</td></tr><tr><th scope="row">addr_hou_1</th><td>' + Autolinker.link(String(feature.properties.addr_hou_1)) + '</td></tr><tr><th scope="row">building_l</th><td>' + Autolinker.link(String(feature.properties.building_l)) + '</td></tr><tr><th scope="row">number_of_</th><td>' + Autolinker.link(String(feature.properties.number_of_)) + '</td></tr><tr><th scope="row">bar</th><td>' + Autolinker.link(String(feature.properties.bar)) + '</td></tr><tr><th scope="row">name_en</th><td>' + Autolinker.link(String(feature.properties.name_en)) + '</td></tr><tr><th scope="row">name_zh</th><td>' + Autolinker.link(String(feature.properties.name_zh)) + '</td></tr><tr><th scope="row">contact_we</th><td>' + Autolinker.link(String(feature.properties.contact_we)) + '</td></tr><tr><th scope="row">contact_ph</th><td>' + Autolinker.link(String(feature.properties.contact_ph)) + '</td></tr><tr><th scope="row">outdoor_se</th><td>' + Autolinker.link(String(feature.properties.outdoor_se)) + '</td></tr><tr><th scope="row">hotel</th><td>' + Autolinker.link(String(feature.properties.hotel)) + '</td></tr><tr><th scope="row">diet_veget</th><td>' + Autolinker.link(String(feature.properties.diet_veget)) + '</td></tr><tr><th scope="row">contact_em</th><td>' + Autolinker.link(String(feature.properties.contact_em)) + '</td></tr><tr><th scope="row">building</th><td>' + Autolinker.link(String(feature.properties.building)) + '</td></tr><tr><th scope="row">takeaway</th><td>' + Autolinker.link(String(feature.properties.takeaway)) + '</td></tr><tr><th scope="row">delivery</th><td>' + Autolinker.link(String(feature.properties.delivery)) + '</td></tr><tr><th scope="row">religion</th><td>' + Autolinker.link(String(feature.properties.religion)) + '</td></tr><tr><th scope="row">addr_unit</th><td>' + Autolinker.link(String(feature.properties.addr_unit)) + '</td></tr><tr><th scope="row">atm</th><td>' + Autolinker.link(String(feature.properties.atm)) + '</td></tr><tr><th scope="row">wpt_symbol</th><td>' + Autolinker.link(String(feature.properties.wpt_symbol)) + '</td></tr><tr><th scope="row">wpt_descri</th><td>' + Autolinker.link(String(feature.properties.wpt_descri)) + '</td></tr></table>';
+					layer.bindPopup(popupContent);
+
+
+				}
+						
+				var exp_OsmQueryJSON = new L.geoJson(exp_OsmQuery,{
+					onEachFeature: pop_OsmQuery,
+					pointToLayer: function (feature, latlng) {  
+						return L.circleMarker(latlng, {
+							radius: feature.properties.radius_qgis2leaf,
+							fillColor: feature.properties.color_qgis2leaf,
+							color: '#000',
+							weight: 1,
+							opacity: feature.properties.transp_qgis2leaf,
+							fillOpacity: feature.properties.transp_fill_qgis2leaf
+							})
+						}
+					});
+				
+				feature_group.addLayer(exp_OsmQueryJSON);
+				layerOrder[layerOrder.length] = exp_OsmQueryJSON;
+				for (index = 0; index < layerOrder.length; index++) {
+					feature_group.removeLayer(layerOrder[index]);feature_group.addLayer(layerOrder[index]);
+				}
+				
+						//add comment sign to hide this layer on the map in the initial view.
+						exp_OsmQueryJSON.addTo(map);
+		var title = new L.Control();
+		title.onAdd = function (map) {
+			this._div = L.DomUtil.create('div', 'info'); // create a div with a class "info"
+			this.update();
+			return this._div;
+	    };
+	    title.update = function () {
+			this._div.innerHTML = '<h2>This is the title</h2>This is the subtitle'
+		};
+		title.addTo(map);
+	L.control.layers({'Stamen Toner': basemap},{"OsmQuery": exp_OsmQueryJSON}).addTo(map);
+	</script>
+</body>
+</html>
+	
